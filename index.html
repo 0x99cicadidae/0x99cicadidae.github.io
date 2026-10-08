@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0x99 Cicadidae - Retro Blog</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Marked parser for Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+</head>
+<body>
+
+  <!-- Retro Header Bar -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="site-branding">
+        <h1 class="site-title"><a href="#">0x99 Cicadidae</a></h1>
+        <span class="site-subtitle">[ Retro Single-Page Journal ]</span>
+      </div>
+      <div class="header-controls">
+        <button id="theme-toggle" class="retro-btn" title="Toggle Light/Dark Theme">
+          <span class="theme-icon">◐</span> <span id="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Intro Header Box -->
+    <section class="intro-box">
+      <div class="intro-title">:: SYSTEM NOTICE / 简介 ::</div>
+      <p>这是一个完全单页的复古博客模板。所有文章加载在同一页面中，原生支持浏览器全文搜索 (<kbd>Ctrl</kbd> + <kbd>F</kbd> 或 <kbd>Cmd</kbd> + <kbd>F</kbd>)。</p>
+      <div class="intro-meta">
+        <span class="meta-item">ARCHITECTURE: Single-Page Vanilla HTML/CSS/JS</span>
+        <span class="meta-item">SEARCH: Native Browser Find-in-Page</span>
+      </div>
+    </section>
+
+    <!-- Posts Container where posts will be rendered -->
+    <div id="posts-container" class="posts-container">
+      <div class="loading-indicator">[ Loading posts... ]</div>
+    </div>
+  </main>
+
+  <!-- Retro Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2025 0x99 Cicadidae. Built for GitHub Pages. Powered by minimal HTML/CSS/JS.</p>
+      <p class="retro-ascii">~*~ [ END OF TRANSMISSION ] ~*~</p>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox-modal" aria-hidden="true">
+    <span class="lightbox-close">&times;</span>
+    <div class="lightbox-content-container">
+      <img class="lightbox-image" id="lightbox-img" alt="Enlarged view">
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "posts": [
+    {
+      "id": "welcome-demo",
+      "filename": "demo.md",
+      "title": "欢迎使用复古博客模板：富媒体与 SVG 动态展示示范",
+      "date": "2025-05-15",
+      "author": "0x99 Cicadidae",
+      "tags": ["Demo", "RetroWeb", "SVG", "Video", "Markdown"]
+    },
+    {
+      "id": "retro-philosophy",
+      "filename": "philosophy.md",
+      "title": "关于极简网页与单页阅读体验",
+      "date": "2025-05-10",
+      "author": "0x99 Cicadidae",
+      "tags": ["Philosophy", "Web1.0", "Design"]
+    }
+  ]
+}
