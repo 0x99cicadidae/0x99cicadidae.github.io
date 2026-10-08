@@ -3,7 +3,7 @@ id: welcome-demo
 title: 欢迎使用复古博客模板：富媒体与 SVG 动态展示示范
 date: 2025-05-15
 author: 0x99 Cicadidae
-tags: [Demo, RetroWeb, SVG, Video, Markdown]
+tags: [Demo, RetroWeb, SVG, Video, Markdown, Code]
 ---
 
 本文是 **0x99 Cicadidae** 复古单页博客模板的功能演示与格式指南。
@@ -12,13 +12,40 @@ tags: [Demo, RetroWeb, SVG, Video, Markdown]
 
 ---
 
-### 一、 文本与基本排版 (Text Formatting)
+### 一、 文本排版与代码高亮 (Text & Code Syntax Highlighting)
 
-支持标准的 Markdown 语法，包括 **加粗**、*斜体*、`行内代码` 以及代码块：
+支持标准的 Markdown 语法，包括 **加粗**、*斜体*、`行内代码 (Inline Code)` 以及多语言代码高亮与一键复制功能：
 
+#### 1. JavaScript 示例
 ```javascript
-// 示例代码：复古单页加载
-console.log("Welcome to 0x99 Cicadidae Retro Blog!");
+// 示例代码：复古单页加载与初始化
+async function initBlog() {
+  const posts = await fetch('posts/posts.json').then(res => res.json());
+  console.log(`Successfully loaded ${posts.length} posts.`);
+}
+initBlog();
+```
+
+#### 2. Python 示例
+```python
+def calculate_fibonacci(n: int) -> list[int]:
+    """生成斐波那契数列示例"""
+    sequence = [0, 1]
+    while len(sequence) < n:
+        sequence.append(sequence[-1] + sequence[-2])
+    return sequence
+
+print("Fibonacci:", calculate_fibonacci(10))
+```
+
+#### 3. CSS / HTML 示例
+```css
+/* 极简复古纸张调色 */
+.post-card {
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px 0px var(--panel-bg);
+}
 ```
 
 > **引用示例：** 极简主义不是缺乏东西，而是没有多余的东西。—— Web 1.0 宣言
