@@ -10,7 +10,7 @@
 ## ✨ 核心特性 (Features)
 
 - 📜 **单页完全加载 (Single-Page Journal)**: 所有文章呈现在同一个页面中，不分多页，响应迅速。
-- 🔍 **依托原生浏览器搜索 (Native Browser Search)**: 充分利用浏览器的 <kbd>Ctrl</kbd> + <kbd>F</kbd>（或 <kbd>Cmd</kbd> + <kbd>F</kbd>）全文检索。标签采用特制格式前缀（如 `[TAG: RetroWeb]`），可将标签搜索与正文文本完美区分开。
+- 🔍 **依托原生浏览器搜索 (Native Browser Search)**: 充分利用浏览器的 <kbd>Ctrl</kbd> + <kbd>F</kbd>（或 <kbd>Cmd</kbd> + <kbd>F</kbd>）全文检索。标签采用简洁的 `#tag_name` 格式，方便直观检索。
 - 🎨 **极简克制与复古美学 (Retro & Paper Aesthetic)**: 纯手写 CSS，浅色模式采用暖白/米黄纸张阅读风格，深色模式采用暗色 CRT 终端风格。
 - 🌗 **深色 / 浅色模式切换**: 一键切换主题，自动记忆用户选择。
 - 🖼️ **图片点击放大 (Lightbox)**: 点击文章内任何图片，触发原生轻量级图片放大模态框。
@@ -102,7 +102,7 @@
 ## 🏷️ 浏览器搜索与 Tag 说明
 
 在搜索文章或特定标签时：
-- 按下 <kbd>Ctrl</kbd> + <kbd>F</kbd> 输入 `[TAG: RetroWeb]` 即可高亮所有包含 `RetroWeb` 标签的文章卡片。
+- 按下 <kbd>Ctrl</kbd> + <kbd>F</kbd> 输入 `#RetroWeb` 即可快速精确定位所有包含该标签的文章。
 - 直接输入任意文本即可进行全局正文查找。
 
 ---
