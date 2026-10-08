@@ -143,11 +143,42 @@ function executePostScripts(container) {
 /* --------------------------------------------------------------------------
    5. Lightbox Modal Functionality
    -------------------------------------------------------------------------- */
+let currentScale = 1;
+let translateX = 0;
+let translateY = 0;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+
+function updateLightboxTransform() {
+  const img = document.getElementById('lightbox-img');
+  if (!img) return;
+  if (currentScale === 1) {
+    translateX = 0;
+    translateY = 0;
+  }
+  img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+  if (currentScale > 1) {
+    img.style.cursor = isDragging ? 'grabbing' : 'grab';
+  } else {
+    img.style.cursor = 'zoom-in';
+  }
+}
+
+function resetLightboxZoom() {
+  currentScale = 1;
+  translateX = 0;
+  translateY = 0;
+  isDragging = false;
+  updateLightboxTransform();
+}
+
 function initLightbox() {
   const modal = document.getElementById('lightbox');
   const closeBtn = document.querySelector('.lightbox-close');
+  const img = document.getElementById('lightbox-img');
 
-  if (!modal || !closeBtn) return;
+  if (!modal || !closeBtn || !img) return;
 
   closeBtn.addEventListener('click', closeLightbox);
   modal.addEventListener('click', (e) => {
@@ -161,6 +192,60 @@ function initLightbox() {
       closeLightbox();
     }
   });
+
+  // Wheel zoom
+  modal.addEventListener('wheel', (e) => {
+    if (!modal.classList.contains('active')) return;
+    e.preventDefault();
+
+    const delta = e.deltaY;
+    const zoomFactor = delta < 0 ? 1.15 : 0.87;
+    const newScale = Math.min(Math.max(1, currentScale * zoomFactor), 5);
+
+    if (newScale !== currentScale) {
+      currentScale = newScale;
+      updateLightboxTransform();
+    }
+  }, { passive: false });
+
+  // Mouse drag panning
+  img.addEventListener('mousedown', (e) => {
+    if (currentScale > 1) {
+      e.preventDefault();
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      updateLightboxTransform();
+    }
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    translateX = e.clientX - startX;
+    translateY = e.clientY - startY;
+    updateLightboxTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      updateLightboxTransform();
+    }
+  });
+
+  // Double-click to toggle zoom between 1x and 2.5x
+  img.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    if (currentScale > 1) {
+      resetLightboxZoom();
+    } else {
+      currentScale = 2.5;
+      translateX = 0;
+      translateY = 0;
+      updateLightboxTransform();
+    }
+  });
 }
 
 function openLightbox(imgSrc, captionText) {
@@ -170,6 +255,7 @@ function openLightbox(imgSrc, captionText) {
 
   if (!modal || !img) return;
 
+  resetLightboxZoom();
   img.src = imgSrc;
   caption.textContent = captionText || '';
   modal.classList.add('active');
@@ -181,6 +267,7 @@ function closeLightbox() {
   if (!modal) return;
   modal.classList.remove('active');
   modal.setAttribute('aria-hidden', 'true');
+  resetLightboxZoom();
 }
 
 function setupImageLightboxListeners() {
