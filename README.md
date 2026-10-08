@@ -16,7 +16,7 @@
 - 🖼️ **图片点击放大 (Lightbox)**: 点击文章内任何图片，触发原生轻量级图片放大模态框。
 - 🎬 **富媒体支持**: 响应式视频容器（支持 HTML5 `<video>`、YouTube 与 Bilibili 嵌入）。
 - 🌀 **SVG 矢量动画支持**: 内联 SVG 支持，预设 CSS 循环旋转、呼吸脉冲、虚线流动动画以及 JS 交互 SVG 节点。
-- 📝 **Markdown 格式撰写**: 文章使用 Markdown 编写，通过清单文件 `posts/posts.json` 自动解析渲染。
+- 📝 **Markdown 格式撰写与 Front Matter 声明**: 文章头部使用兼容 Markdown 语法的 Front Matter (`---`) 声明日期、标签、标题与作者，页面自动解析渲染。
 
 ---
 
@@ -26,9 +26,9 @@
 .
 ├── index.html        # 主页面结构
 ├── style.css         # 完全手写克制的 CSS 样式（含浅色/深色主题与动画）
-├── app.js            # 核心脚本：主题切换、Markdown 加载、Tags 渲染、Lightbox 模态框
+├── app.js            # 核心脚本：主题切换、Markdown 与 Front Matter 加载解析、Tags 渲染、Lightbox 模态框
 ├── posts/
-│   ├── posts.json    # 文章索引清单 (Manifest)
+│   ├── posts.json    # 文章文件名清单 (Manifest)
 │   ├── demo.md       # 富媒体与 SVG 动态示例文章
 │   └── philosophy.md # 极简单页设计哲学文章
 ├── LICENSE           # 开源协议 (GPL-3.0)
@@ -52,11 +52,19 @@
 
 只需两步即可发布新文章：
 
-#### 步骤一：在 `posts/` 目录下创建 Markdown 文件 (如 `my-new-post.md`)
+#### 步骤一：在 `posts/` 目录下创建 Markdown 文件 (如 `my-new-post.md`)，并在开头声明 Front Matter 信息
 
-可以使用 Markdown 标准语法，也可以插入富媒体元素：
+在 Markdown 文件最开头使用 `---` 包裹 YAML/Front Matter 兼容格式声明文章信息：
 
 ```markdown
+---
+id: my-new-post
+title: 我的第一篇文章标题
+date: 2025-05-20
+author: 0x99 Cicadidae
+tags: [Life, RetroWeb, Notes]
+---
+
 这是我的第一篇复古博客文章。
 
 ### 插入图片 (点击可放大)
@@ -78,21 +86,14 @@
 </div>
 ```
 
-#### 步骤二：在 `posts/posts.json` 中添加文章配置
+#### 步骤二：在 `posts/posts.json` 中添加文件名
 
-修改 `posts/posts.json` 文件，添加你的新文章条目：
+修改 `posts/posts.json` 文件，添加你的新文章文件名：
 
 ```json
 {
   "posts": [
-    {
-      "id": "my-new-post",
-      "filename": "my-new-post.md",
-      "title": "我的第一篇文章标题",
-      "date": "2025-05-20",
-      "author": "0x99 Cicadidae",
-      "tags": ["Life", "RetroWeb", "Notes"]
-    }
+    "my-new-post.md"
   ]
 }
 ```

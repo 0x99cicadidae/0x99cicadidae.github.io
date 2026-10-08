@@ -41,7 +41,56 @@ function initThemeToggle() {
 }
 
 /* --------------------------------------------------------------------------
-   2. Post Manifest & Markdown Loader
+   2. Front Matter Parser
+   -------------------------------------------------------------------------- */
+function parseFrontMatter(text) {
+  const meta = {
+    title: '',
+    date: '',
+    author: '',
+    tags: []
+  };
+  let content = text;
+
+  const frontMatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;
+  const match = text.match(frontMatterRegex);
+
+  if (match) {
+    content = text.slice(match[0].length);
+    const yamlLines = match[1].split(/\r?\n/);
+
+    yamlLines.forEach(line => {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex === -1) return;
+
+      const key = line.slice(0, colonIndex).trim();
+      let value = line.slice(colonIndex + 1).trim();
+
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+
+      if (key === 'tags') {
+        if (value.startsWith('[') && value.endsWith(']')) {
+          meta.tags = value
+            .slice(1, -1)
+            .split(',')
+            .map(t => t.trim().replace(/^['"]|['"]$/g, ''))
+            .filter(Boolean);
+        } else if (value) {
+          meta.tags = [value];
+        }
+      } else if (key) {
+        meta[key] = value;
+      }
+    });
+  }
+
+  return { meta, content };
+}
+
+/* --------------------------------------------------------------------------
+   3. Post Manifest & Markdown Loader
    -------------------------------------------------------------------------- */
 async function loadPosts() {
   const container = document.getElementById('posts-container');
@@ -62,20 +111,32 @@ async function loadPosts() {
     const loadedPostsMeta = [];
 
     // Fetch and render each Markdown post in order
-    for (const postMeta of manifest.posts) {
+    for (const postItem of manifest.posts) {
       try {
-        const postRes = await fetch(`posts/${postMeta.filename}`);
+        const filename = typeof postItem === 'string' ? postItem : (postItem.filename || postItem);
+        const manifestMeta = typeof postItem === 'object' ? postItem : {};
+
+        const postRes = await fetch(`posts/${filename}`);
         if (!postRes.ok) {
-          console.error(`Failed to load ${postMeta.filename}`);
+          console.error(`Failed to load ${filename}`);
           continue;
         }
-        const mdContent = await postRes.text();
+        const rawMd = await postRes.text();
+        const { meta: fmMeta, content: mdContent } = parseFrontMatter(rawMd);
+
+        const postMeta = {
+          filename,
+          id: filename.replace(/\.md$/, ''),
+          ...manifestMeta,
+          ...fmMeta
+        };
+
         const postElement = renderPost(postMeta, mdContent);
         container.appendChild(postElement);
         executePostScripts(postElement);
         loadedPostsMeta.push(postMeta);
       } catch (err) {
-        console.error(`Error loading post ${postMeta.filename}:`, err);
+        console.error(`Error loading post:`, err);
       }
     }
 
@@ -93,7 +154,7 @@ async function loadPosts() {
 }
 
 /* --------------------------------------------------------------------------
-   3. Render Single Post Element
+   4. Render Single Post Element
    -------------------------------------------------------------------------- */
 function renderPost(meta, markdown) {
   const article = document.createElement('article');
@@ -126,7 +187,7 @@ function renderPost(meta, markdown) {
 }
 
 /* --------------------------------------------------------------------------
-   4. Script Execution in Dynamic HTML Content
+   5. Script Execution in Dynamic HTML Content
    -------------------------------------------------------------------------- */
 function executePostScripts(container) {
   const scripts = container.querySelectorAll('script');
@@ -141,7 +202,7 @@ function executePostScripts(container) {
 }
 
 /* --------------------------------------------------------------------------
-   5. Lightbox Modal Functionality
+   6. Lightbox Modal Functionality
    -------------------------------------------------------------------------- */
 let currentScale = 1;
 let translateX = 0;
@@ -281,7 +342,7 @@ function setupImageLightboxListeners() {
 }
 
 /* --------------------------------------------------------------------------
-   6. Interactive SVG Event Handlers
+   7. Interactive SVG Event Handlers
    -------------------------------------------------------------------------- */
 function setupInteractiveSvgListeners() {
   const svgElements = document.querySelectorAll('#interactive-svg');
@@ -302,7 +363,7 @@ function setupInteractiveSvgListeners() {
 }
 
 /* --------------------------------------------------------------------------
-   7. Render Directory / Index List at Page Bottom
+   8. Render Directory / Index List at Page Bottom
    -------------------------------------------------------------------------- */
 function renderDirectory(postsMeta) {
   const dirList = document.getElementById('posts-directory-list');

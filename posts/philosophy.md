@@ -1,3 +1,11 @@
+---
+id: retro-philosophy
+title: 关于极简网页与单页阅读体验
+date: 2025-05-10
+author: 0x99 Cicadidae
+tags: [Philosophy, Web1.0, Design]
+---
+
 ### 网页哲学：极简、纯粹与长久
 
 在当今充满了重型 JavaScript 框架、成百上千个 npm 依赖包以及动辄数兆字节 bundle 的现代 Web 开发中，我们常常忽略了网页最初的本真。
