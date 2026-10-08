@@ -132,6 +132,7 @@ async function loadPosts() {
         };
 
         const postElement = renderPost(postMeta, mdContent);
+        enhanceCodeBlocks(postElement);
         container.appendChild(postElement);
         executePostScripts(postElement);
         loadedPostsMeta.push(postMeta);
@@ -184,6 +185,88 @@ function renderPost(meta, markdown) {
   `;
 
   return article;
+}
+
+/* --------------------------------------------------------------------------
+   4.1 Enhance & Highlight Code Blocks
+   -------------------------------------------------------------------------- */
+function enhanceCodeBlocks(container) {
+  const preElements = container.querySelectorAll('.post-body pre');
+
+  preElements.forEach(pre => {
+    if (pre.parentElement && pre.parentElement.classList.contains('code-block-wrapper')) {
+      return;
+    }
+
+    const codeEl = pre.querySelector('code');
+    let lang = 'CODE';
+
+    if (codeEl) {
+      const classList = Array.from(codeEl.classList);
+      const langClass = classList.find(c => c.startsWith('language-') || c.startsWith('lang-'));
+      if (langClass) {
+        lang = langClass.replace(/^(language-|lang-)/, '').toUpperCase();
+      }
+
+      if (typeof hljs !== 'undefined') {
+        try {
+          hljs.highlightElement(codeEl);
+        } catch (e) {
+          console.error('Highlight.js error:', e);
+        }
+      }
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+
+    const header = document.createElement('div');
+    header.className = 'code-block-header';
+
+    const langSpan = document.createElement('span');
+    langSpan.className = 'code-lang-tag';
+    langSpan.textContent = `[ ${lang} ]`;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'code-copy-btn';
+    copyBtn.title = 'Copy code to clipboard';
+    copyBtn.textContent = 'Copy';
+
+    copyBtn.addEventListener('click', async () => {
+      const codeToCopy = codeEl ? codeEl.textContent : pre.textContent;
+      try {
+        await navigator.clipboard.writeText(codeToCopy);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        const textarea = document.createElement('textarea');
+        textarea.value = codeToCopy;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => {
+            copyBtn.textContent = 'Copy';
+          }, 2000);
+        } catch (e) {
+          copyBtn.textContent = 'Failed';
+        }
+        document.body.removeChild(textarea);
+      }
+    });
+
+    header.appendChild(langSpan);
+    header.appendChild(copyBtn);
+
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(header);
+    wrapper.appendChild(pre);
+  });
 }
 
 /* --------------------------------------------------------------------------
