@@ -199,6 +199,62 @@ kbd {
   box-shadow: 3px 3px 0px var(--border-color);
 }
 
+/* Directory / Article List at Bottom of Page */
+.directory-box {
+  border: 2px solid var(--border-color);
+  background-color: var(--panel-bg);
+  padding: 20px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  box-shadow: 3px 3px 0px var(--border-color);
+}
+
+.directory-title {
+  font-family: var(--font-mono);
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  color: var(--accent-color);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.directory-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.directory-item {
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.directory-item:last-child {
+  border-bottom: none;
+}
+
+.dir-num {
+  font-weight: bold;
+  color: var(--text-muted);
+}
+
+.dir-link {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.dir-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .intro-title {
   font-family: var(--font-mono);
   font-weight: bold;

@@ -59,6 +59,8 @@ async function loadPosts() {
 
     container.innerHTML = ''; // Clear loading indicator
 
+    const loadedPostsMeta = [];
+
     // Fetch and render each Markdown post in order
     for (const postMeta of manifest.posts) {
       try {
@@ -71,10 +73,14 @@ async function loadPosts() {
         const postElement = renderPost(postMeta, mdContent);
         container.appendChild(postElement);
         executePostScripts(postElement);
+        loadedPostsMeta.push(postMeta);
       } catch (err) {
         console.error(`Error loading post ${postMeta.filename}:`, err);
       }
     }
+
+    // Render directory / article index list at bottom of page
+    renderDirectory(loadedPostsMeta);
 
     // Attach image lightbox listeners & interactive SVG fallback
     setupImageLightboxListeners();
@@ -205,6 +211,31 @@ function setupInteractiveSvgListeners() {
       if (node) node.setAttribute('fill', randomColor);
       if (text) text.textContent = 'ACTIVE';
     });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   7. Render Directory / Index List at Page Bottom
+   -------------------------------------------------------------------------- */
+function renderDirectory(postsMeta) {
+  const dirList = document.getElementById('posts-directory-list');
+  if (!dirList) return;
+
+  dirList.innerHTML = '';
+  postsMeta.forEach((meta, idx) => {
+    const postId = `post-${meta.id || meta.filename.replace('.md', '')}`;
+    const li = document.createElement('li');
+    li.className = 'directory-item';
+
+    const num = String(idx + 1).padStart(2, '0');
+    const tagsStr = (meta.tags || []).map(t => `[${t}]`).join(' ');
+
+    li.innerHTML = `
+      <span class="dir-num">[${num}]</span>
+      <a href="#${postId}" class="dir-link">${escapeHtml(meta.title)}</a>
+      <span class="dir-meta">(${escapeHtml(meta.date)}) ${escapeHtml(tagsStr)}</span>
+    `;
+    dirList.appendChild(li);
   });
 }
 
