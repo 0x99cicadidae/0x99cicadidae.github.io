@@ -100,9 +100,9 @@ function renderPost(meta, markdown) {
   article.className = 'post-card';
   article.id = `post-${meta.id || meta.filename.replace('.md', '')}`;
 
-  // Format tags with distinctive prefix/suffix for browser search distinction: [TAG: label]
+  // Format tags simplified with # prefix: #label
   const tagsHtml = (meta.tags || [])
-    .map(tag => `<span class="retro-tag">[TAG: ${escapeHtml(tag)}]</span>`)
+    .map(tag => `<span class="retro-tag">#${escapeHtml(tag)}</span>`)
     .join(' ');
 
   // Parse Markdown using marked
@@ -228,7 +228,7 @@ function renderDirectory(postsMeta) {
     li.className = 'directory-item';
 
     const num = String(idx + 1).padStart(2, '0');
-    const tagsStr = (meta.tags || []).map(t => `[${t}]`).join(' ');
+    const tagsStr = (meta.tags || []).map(t => `#${t}`).join(' ');
 
     li.innerHTML = `
       <span class="dir-num">[${num}]</span>
