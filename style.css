@@ -315,13 +315,9 @@ kbd {
 
 .retro-tag {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  background-color: var(--tag-bg);
-  color: var(--tag-text);
-  padding: 1px 6px;
-  border: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  color: var(--text-muted);
   letter-spacing: 0.5px;
-  font-weight: bold;
 }
 
 /* Markdown Post Content Inner Styles */
