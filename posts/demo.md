@@ -1,3 +1,11 @@
+---
+id: welcome-demo
+title: 欢迎使用复古博客模板：富媒体与 SVG 动态展示示范
+date: 2025-05-15
+author: 0x99 Cicadidae
+tags: [Demo, RetroWeb, SVG, Video, Markdown]
+---
+
 本文是 **0x99 Cicadidae** 复古单页博客模板的功能演示与格式指南。
 
 本博客设计遵循 Web 1.0 怀旧风与极简纸张阅读体验，所有文章均在单页中呈现。为了让您在浏览器中使用快捷键（<kbd>Ctrl</kbd> + <kbd>F</kbd> 或 <kbd>Cmd</kbd> + <kbd>F</kbd>）精准搜索，文章的 Tag 标签采用了简洁直观的 `#tag_name` 格式（例如 `#RetroWeb`）。
