@@ -21,7 +21,7 @@ function initThemeToggle() {
   if (savedTheme) {
     html.setAttribute('data-theme', savedTheme);
   } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    html.setAttribute('data-theme', darkThemeName());
+    html.setAttribute('data-theme', 'dark');
   }
 
   updateToggleText();
@@ -37,10 +37,6 @@ function initThemeToggle() {
   function updateToggleText() {
     const isDark = html.getAttribute('data-theme') === 'dark';
     themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
-  }
-
-  function darkThemeName() {
-    return 'dark';
   }
 }
 
@@ -74,13 +70,15 @@ async function loadPosts() {
         const mdContent = await postRes.text();
         const postElement = renderPost(postMeta, mdContent);
         container.appendChild(postElement);
+        executePostScripts(postElement);
       } catch (err) {
         console.error(`Error loading post ${postMeta.filename}:`, err);
       }
     }
 
-    // Attach image lightbox listeners to newly rendered images
+    // Attach image lightbox listeners & interactive SVG fallback
     setupImageLightboxListeners();
+    setupInteractiveSvgListeners();
 
   } catch (error) {
     console.error('Error in loadPosts:', error);
@@ -122,7 +120,22 @@ function renderPost(meta, markdown) {
 }
 
 /* --------------------------------------------------------------------------
-   4. Lightbox Modal Functionality
+   4. Script Execution in Dynamic HTML Content
+   -------------------------------------------------------------------------- */
+function executePostScripts(container) {
+  const scripts = container.querySelectorAll('script');
+  scripts.forEach(oldScript => {
+    const newScript = document.createElement('script');
+    Array.from(oldScript.attributes).forEach(attr => {
+      newScript.setAttribute(attr.name, attr.value);
+    });
+    newScript.appendChild(document.createTextNode(oldScript.textContent));
+    oldScript.parentNode.replaceChild(newScript, oldScript);
+  });
+}
+
+/* --------------------------------------------------------------------------
+   5. Lightbox Modal Functionality
    -------------------------------------------------------------------------- */
 function initLightbox() {
   const modal = document.getElementById('lightbox');
@@ -170,6 +183,27 @@ function setupImageLightboxListeners() {
     img.addEventListener('click', () => {
       const altText = img.getAttribute('alt') || '';
       openLightbox(img.src, altText);
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   6. Interactive SVG Event Handlers
+   -------------------------------------------------------------------------- */
+function setupInteractiveSvgListeners() {
+  const svgElements = document.querySelectorAll('#interactive-svg');
+  svgElements.forEach(svg => {
+    svg.addEventListener('click', () => {
+      const node = svg.querySelector('#svg-node');
+      const text = svg.querySelector('#svg-text');
+      const colors = ['#e06c75', '#98c379', '#e5c07b', '#61afef', '#c678dd', '#d19a66'];
+      const currentColor = node ? node.getAttribute('fill') : '';
+      let randomColor = colors[Math.floor(Math.random() * colors.length)];
+      while (randomColor === currentColor) {
+        randomColor = colors[Math.floor(Math.random() * colors.length)];
+      }
+      if (node) node.setAttribute('fill', randomColor);
+      if (text) text.textContent = 'ACTIVE';
     });
   });
 }
