@@ -89,10 +89,8 @@ print("Fibonacci:", calculate_fibonacci(10))
   <svg width="220" height="220" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
     <!-- 外圈虚线旋转 -->
     <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="2" class="anim-dash anim-spin" />
-
     <!-- 中间六边形/几何图形 -->
     <polygon points="100,40 150,70 150,130 100,160 50,130 50,70" fill="none" stroke="currentColor" stroke-width="2" class="anim-spin" style="animation-direction: reverse; animation-duration: 12s;" />
-
     <!-- 核心呼吸脉冲圆 -->
     <circle cx="100" cy="100" r="25" fill="var(--accent-color)" class="anim-pulse" />
     <text x="100" y="105" font-family="monospace" font-size="12" fill="#ffffff" text-anchor="middle">RETRO</text>
